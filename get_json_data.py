@@ -2,27 +2,6 @@ import json
 import kor_char_parser
 from pprint import pprint
 
-# get data from json
-
-
-# split comments and scores
-class Dataset:
-    def __init__(self, max_length: int):
-        dataset_path = "movie_score.json"
-        with open(dataset_path, encoding='utf-8') as f:
-            self.data = json.loads(f.read())
-
-        self.comments = []
-        self.scores = []
-        for review in data:
-            comments.append(review["comment_text"])
-            scores.append(review["score"])
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        return self.comments[idx], self.scores[idx]
 
 def preprocess(data: list, max_length: int):
     """
@@ -44,3 +23,50 @@ def preprocess(data: list, max_length: int):
             zero_padding[idx, :length] = np.array(seq)
     return zero_padding
 
+def load_data_and_labels():
+    """
+    Loads polarity data from files, splits the data into words and generates labels.
+    Returns split sentences and labels.
+    """
+    # Load data from files
+    #positive_examples = list(open("./data/rt-polarity.pos", "r", encoding='latin-1').readlines())
+    #positive_examples = [s.strip() for s in positive_examples]
+    #negative_examples = list(open("./data/rt-polarity.neg", "r", encoding='latin-1').readlines())
+    #negative_examples = [s.strip() for s in negative_examples]
+
+    # split comments and scores
+    dataset_path = "movie_score.json"
+    with open(dataset_path, encoding='utf-8') as f:
+        data = json.loads(f.read())
+
+    comments = []
+    scores = []
+    for review in data:
+        comments.append(review["comment_text"])
+        scores.append(review["score"])
+
+    # Split by words
+    #x_text = positive_examples + negative_examples
+    #x_text = [clean_str(sent) for sent in x_text]
+    #x_text = [s.split(" ") for s in x_text]
+    # Generate labels
+    #positive_labels = [[0, 1] for _ in positive_examples]
+    #negative_labels = [[1, 0] for _ in negative_examples]
+    return [comments, scores]
+
+def load_data():
+    """
+    Loads and preprocessed data for the dataset.
+    Returns input vectors, labels, vocabulary, and inverse vocabulary.
+    """
+    # Load and preprocess data
+    sentences, labels = load_data_and_labels()
+    sentences_padded = pad_sentences(sentences)
+    vocabulary, vocabulary_inv = build_vocab(sentences_padded)
+    x, y = build_input_data(sentences_padded, labels, vocabulary)
+    return [x, y, vocabulary, vocabulary_inv]
+
+
+if __name__ == '__main__':
+    comments, labels = load_data_and_labels()
+    print(labels)
