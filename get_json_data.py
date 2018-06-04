@@ -1,5 +1,6 @@
 import json
-import kor_char_parser
+import numpy as np
+from kor_char_parser import decompose_str_as_one_hot
 from pprint import pprint
 
 
@@ -61,12 +62,12 @@ def load_data():
     """
     # Load and preprocess data
     sentences, labels = load_data_and_labels()
-    sentences_padded = pad_sentences(sentences)
-    vocabulary, vocabulary_inv = build_vocab(sentences_padded)
-    x, y = build_input_data(sentences_padded, labels, vocabulary)
-    return [x, y, vocabulary, vocabulary_inv]
+    max_len = 200
+    sentences_padded = preprocess(sentences, max_len)
+    print(sentences_padded)
+    #x, y = build_input_data(sentences_padded, labels, vocabulary)
+    #return [x, y, vocabulary, vocabulary_inv]
 
 
 if __name__ == '__main__':
-    comments, labels = load_data_and_labels()
-    print(labels)
+    load_data()
