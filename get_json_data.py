@@ -29,30 +29,19 @@ def load_data_and_labels():
     Loads polarity data from files, splits the data into words and generates labels.
     Returns split sentences and labels.
     """
-    # Load data from files
-    #positive_examples = list(open("./data/rt-polarity.pos", "r", encoding='latin-1').readlines())
-    #positive_examples = [s.strip() for s in positive_examples]
-    #negative_examples = list(open("./data/rt-polarity.neg", "r", encoding='latin-1').readlines())
-    #negative_examples = [s.strip() for s in negative_examples]
-
-    # split comments and scores
+    # load data
     dataset_path = "movie_score.json"
     with open(dataset_path, encoding='utf-8') as f:
         data = json.loads(f.read())
+
+    # split comments and scores
 
     comments = []
     scores = []
     for review in data:
         comments.append(review["comment_text"])
-        scores.append(review["score"])
+        scores.append(int(review["score"]) - 1)
 
-    # Split by words
-    #x_text = positive_examples + negative_examples
-    #x_text = [clean_str(sent) for sent in x_text]
-    #x_text = [s.split(" ") for s in x_text]
-    # Generate labels
-    #positive_labels = [[0, 1] for _ in positive_examples]
-    #negative_labels = [[1, 0] for _ in negative_examples]
     return [comments, scores]
 
 def load_data():
@@ -64,10 +53,9 @@ def load_data():
     sentences, labels = load_data_and_labels()
     max_len = 200
     sentences_padded = preprocess(sentences, max_len)
-    print(sentences_padded)
-    #x, y = build_input_data(sentences_padded, labels, vocabulary)
-    #return [x, y, vocabulary, vocabulary_inv]
+    return [sentences_padded, labels]
 
 
 if __name__ == '__main__':
-    load_data()
+    embedded_sentences, labels = load_data()
+
