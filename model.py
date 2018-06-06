@@ -53,5 +53,3 @@ model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 print("Traning Model...")
 model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(X_test, y_test))  # starts training
 
-
-

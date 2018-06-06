@@ -24,14 +24,13 @@ def preprocess(data: list, max_length: int):
             zero_padding[idx, :length] = np.array(seq)
     return zero_padding
 
-def load_data_and_labels():
+def load_data_and_labels(data_name):
     """
     Loads polarity data from files, splits the data into words and generates labels.
     Returns split sentences and labels.
     """
     # load data
-    dataset_path = "movie_score.json"
-    with open(dataset_path, encoding='utf-8') as f:
+    with open(data_name, encoding='utf-8') as f:
         data = json.loads(f.read())
 
     # split comments and scores
@@ -41,21 +40,22 @@ def load_data_and_labels():
     for review in data:
         comments.append(review["comment_text"])
         scores.append(int(review["score"]) - 1)
-
+    
     return [comments, scores]
 
-def load_data():
+def load_data(data_name):
     """
     Loads and preprocessed data for the dataset.
     Returns input vectors, labels, vocabulary, and inverse vocabulary.
     """
     # Load and preprocess data
-    sentences, labels = load_data_and_labels()
+    sentences, labels = load_data_and_labels(data_name)
     max_len = 200
     sentences_padded = preprocess(sentences, max_len)
     return [sentences_padded, labels]
 
 
 if __name__ == '__main__':
-    embedded_sentences, labels = load_data()
+    data_name = "movie_score_train.json"
+    embedded_sentences, labels = load_data(data_name)
 
