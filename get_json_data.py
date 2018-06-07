@@ -40,6 +40,7 @@ def load_data_and_labels(data_name):
     for review in data:
         comments.append(review["comment_text"])
         scores.append(int(review["score"]) - 1)
+    print(comments[0])
     
     return [comments, scores]
 
