@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import re
 from kor_char_parser import decompose_str_as_one_hot
 from pprint import pprint
 
@@ -24,6 +25,12 @@ def preprocess(data: list, max_length: int):
             zero_padding[idx, :length] = np.array(seq)
     return zero_padding
 
+def mask_data(comments, title, people):
+    comments = re.sub(title, '', comments)
+    for person in people:
+        comments = re.sub(person, '', comments)
+    return comments
+
 def load_data_and_labels(data_name):
     """
     Loads polarity data from files, splits the data into words and generates labels.
@@ -38,7 +45,7 @@ def load_data_and_labels(data_name):
     comments = []
     scores = []
     for review in data:
-        comments.append(review["comment_text"])
+        comments.append(mask_data(review["comment_text"], review["title"], review["people"]))
         scores.append(int(review["score"]) - 1)
     print(comments[0])
     
@@ -57,6 +64,6 @@ def load_data(data_name):
 
 
 if __name__ == '__main__':
-    data_name = "movie_score_train.json"
+    data_name = "movie_score.json"
     embedded_sentences, labels = load_data(data_name)
 

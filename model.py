@@ -8,11 +8,12 @@ from sklearn.model_selection import train_test_split
 from get_json_data import load_data
 
 print('Loading data')
-x, y = load_data()
+x, y = load_data('movie_score.json')
 print(set(y))
 y = to_categorical(y)
 print(y[0])
-X_train, X_test, y_train, y_test = train_test_split( x, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split( x, y, test_size=0.4, random_state=42)
+X_train, X_validation, y_train, y_validation = train_test_split(X_train, y_train, test_size = 0.2, random_state=30)
 
 sequence_length = x.shape[1] # 200
 character_size = 251 # 251
@@ -21,7 +22,7 @@ filter_sizes = [3,4,5]
 num_filters = 512
 drop = 0.5
 
-epochs = 100
+epochs = 1
 batch_size = 30
 
 # this returns a tensor
@@ -51,5 +52,7 @@ adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 
 model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 print("Traning Model...")
-model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(X_test, y_test))  # starts training
+model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(X_validation, y_validation))  # starts training
+
+pred = model.predict(X_test).argmax(axis=1)
 
