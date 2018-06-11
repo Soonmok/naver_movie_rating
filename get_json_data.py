@@ -45,9 +45,12 @@ def load_data_and_labels(data_name):
     comments = []
     scores = []
     for review in data:
-        comments.append(mask_data(review["comment_text"], review["title"], review["people"]))
-        scores.append(int(review["score"]) - 1)
-    print(comments[0])
+        if int(review["score"]) == 10:
+            pass
+        else:
+            comments.append(mask_data(review["comment_text"], review["title"], review["people"]))
+            scores.append(int(review["score"]) - 1)
+    print(set(scores))
     
     return [comments, scores]
 
