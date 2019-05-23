@@ -7,3 +7,4 @@ Applied a NLP algorithm to predict movie rating
 - [A Sensitivity Analysis of (and Practitioners' Guide to) Convolutional Neural Networks for Sentence Classification](http://arxiv.org/abs/1510.03820)
 
 - https://github.com/dennybritz/cnn-text-classification-tf [DennyBritz]
+- https://github.com/naver/ai-hackathon [Competition Baseline code]
